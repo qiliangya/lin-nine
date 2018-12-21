@@ -5,7 +5,7 @@
   <p className="name">your msg: {msg}</p>}
          
          <p style={{ display: this.props.msg ? 'block' : 'none' }} className="shown">test v-show</p>
-         <p v-on:click="clickMethod">test v-on</p>
+         <p onClick={this.clickMethod}>test v-on</p>
          <img v-bind:src="imageSrc" />
          <ul className="test-list">
              <li v-for="(value, index) in list" v-bind:key="index" className="list-item">

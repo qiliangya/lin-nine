@@ -4,7 +4,7 @@ const tools = require('../utils/tools')
 const t = require('babel-types')
 
 // 引入指令转化
-const { handleIf, handleShow } = require('../plugins/directives.js')
+const { handleIf, handleShow, handleOn } = require('../plugins/directives.js')
 
 /*
 * 将vue的template转化成jsx
@@ -33,7 +33,15 @@ module.exports = function transformTemplate(tpl, state) {
         return ;
       }
       const attrName = node.name.name
-
+      if (t.isJSXNamespacedName(node.name)) {
+        const namespace = node.name.namespace.name
+        if (namespace === 'v-on') {
+          handleOn(path, node.name.name.name, value)
+        } else if (namespace === 'v-bind') {
+          // handleBind(path, node.name.name.name, value)
+        }
+        return ;
+      }
       switch (attrName) {
         case 'class': {
           path.replaceWith(
@@ -45,7 +53,7 @@ module.exports = function transformTemplate(tpl, state) {
           handleIf(path, value, state); break;
         }
         case 'v-show': {
-          handleShow(path, value, state)
+          handleShow(path, value, state); break;
         }
       }
 

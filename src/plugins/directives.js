@@ -1,5 +1,6 @@
-const { getNextJSXElment, getIdentifier } = require('../utils/tools')
+const { getNextJSXElment, getIdentifier, log } = require('../utils/tools')
 const t = require('babel-types')
+const eventMap = require('./event-maps')
 /*
 * 转化指令v-if
 * 
@@ -24,6 +25,7 @@ exports.handleIf = function(path, value, state) {
   path.remove();
 }
 
+// 显示隐藏
 exports.handleShow = function(path, value, state) {
     const test = state.computeds[value] ? t.identifier(value) : t.memberExpression(
         t.memberExpression(t.thisExpression(), getIdentifier(state, value)),
@@ -46,4 +48,26 @@ exports.handleShow = function(path, value, state) {
             )
         )
     )
+}
+
+// 事件转化
+exports.handleOn = function (path, name, value) {
+    const eventName = eventMap[name];
+    // 当找不到事件对应的map时 需要手动添加
+    if (!eventName) {
+        log(`Can't find the eventName(${name}), you can add transform in the event-maps.js`);
+        return;
+    }
+
+    path.replaceWith(
+        t.jSXAttribute(
+            t.jSXIdentifier(eventName),
+            t.jSXExpressionContainer(
+                t.memberExpression(
+                    t.thisExpression(),
+                    t.identifier(value)
+                )
+            )
+        )
+    );
 }

@@ -1,15 +1,16 @@
 {
-  "name": "babel",
+  "name": "nine",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bin/main.js",
   "bin": {
     "nine": "bin/main.js"
   },
   "scripts": {
+    "start": "node bin/main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "qiliangya",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",

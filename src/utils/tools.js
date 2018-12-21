@@ -1,4 +1,5 @@
 const t = require('babel-types');
+const chalk = require('chalk');
 /**
  * 将vue的template简写属性 转化为全称, 例如 @ -> v-on : -> v-bind 
  *
@@ -36,13 +37,22 @@ function getIdentifier (state, key) {
   return state.data.hasOwnProperty(key) ? t.identifier('state') : t.identifier('props');
 }
 
+function log (msg, type = 'error') {
+  if (type === 'error') {
+      return console.log(chalk.red(`[nine]: ${msg}`));
+  }
+  console.log(chalk.green(msg));
+};
+
 
 exports.formatContent = formatContent
 exports.getNextJSXElment = getNextJSXElment
 exports.getIdentifier = getIdentifier
+exports.log = log
 
 module.exports = {
   formatContent,
   getNextJSXElment,
-  getIdentifier
+  getIdentifier,
+  log
 }
