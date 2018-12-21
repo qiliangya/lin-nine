@@ -6,15 +6,15 @@
          
          <p style={{ display: this.props.msg ? 'block' : 'none' }} className="shown">test v-show</p>
          <p onClick={this.clickMethod}>test v-on</p>
-         <img v-bind:src="imageSrc" />
+         <img src={this.props.imageSrc} />
          <ul className="test-list">
-             <li v-for="(value, index) in list" v-bind:key="index" className="list-item">
+             {this.props.list.map((value, index) => {return <li key={index}>
                  <div>{value}</div>
                  <span>{msg}</span>
-             </li>
+             </li>;})}
          </ul>
-         <span v-text="text"></span>
-         <div v-html="html"></div>
-         <to-do v-bind:msg="msg" v-bind:list="list"></to-do>
+         <span>{this.props.text.replace(/<[^>]+>/g, '')}</span>
+         <div dangerouslySetInnerHTML={{ __html: this.props.html }}></div>
+         <to-do msg={this.props.msg} list={this.props.list}></to-do>
          {msg}
     </div>

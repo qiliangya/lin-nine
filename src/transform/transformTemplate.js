@@ -4,7 +4,7 @@ const tools = require('../utils/tools')
 const t = require('babel-types')
 
 // 引入指令转化
-const { handleIf, handleShow, handleOn } = require('../plugins/directives.js')
+const { handleIf, handleShow, handleOn, handleBind, handleFor, handleHtml, handleText } = require('../plugins/directives.js')
 
 /*
 * 将vue的template转化成jsx
@@ -12,6 +12,7 @@ const { handleIf, handleShow, handleOn } = require('../plugins/directives.js')
 
 module.exports = function transformTemplate(tpl, state) {
   let argument = null;
+  const definedInFor = []
   // 获取vue转化后的模板
   const templateAst = babylon.parse(tools.formatContent(tpl), {
     plugins: ['jsx'],
@@ -38,7 +39,7 @@ module.exports = function transformTemplate(tpl, state) {
         if (namespace === 'v-on') {
           handleOn(path, node.name.name.name, value)
         } else if (namespace === 'v-bind') {
-          // handleBind(path, node.name.name.name, value)
+          handleBind(path, node.name.name.name, value, state)
         }
         return ;
       }
@@ -54,6 +55,15 @@ module.exports = function transformTemplate(tpl, state) {
         }
         case 'v-show': {
           handleShow(path, value, state); break;
+        }
+        case 'v-for': {
+          handleFor(path, value, definedInFor, state); break;
+        }
+        case 'v-text': {
+          handleText(path, value, state); break;
+        }
+        case 'v-html': {
+          handleHtml(path, value, state); break;
         }
       }
 
