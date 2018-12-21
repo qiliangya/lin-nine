@@ -33,7 +33,7 @@ function getNextJSXElment (path) {
 }
 
 function getIdentifier (state, key) {
-  return state.data[key] ? t.identifier('state') : t.identifier('props');
+  return state.data.hasOwnProperty(key) ? t.identifier('state') : t.identifier('props');
 }
 
 

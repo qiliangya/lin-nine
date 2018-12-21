@@ -5,16 +5,19 @@ var generate = require('babel-generator').default;
 
 const transformTemplate = require('./transform/transformTemplate')
 
-// vue状态
-const state = {
-  name: undefined,
-  data: {},
-  props: {},
-  computeds: {},
-  components: {}
-};
+
 
 module.exports = function() {
+  // vue状态
+  const state = {
+    name: undefined,
+    data: {
+      error: false
+    },
+    props: {},
+    computeds: {},
+    components: {}
+  };
 
   const tast = transformTemplate(tpl, state) // 转化后的template ast树
   

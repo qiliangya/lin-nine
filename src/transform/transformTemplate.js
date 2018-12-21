@@ -27,7 +27,7 @@ module.exports = function transformTemplate(tpl, state) {
     },
     JSXAttribute (path) {
       const node = path.node;
-      const value = node.value
+      const value = node.value.value
 
       if (!node.name) {
         return ;

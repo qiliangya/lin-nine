@@ -12,9 +12,6 @@ exports.handleIf = function(path, value, state) {
       t.memberExpression(t.thisExpression(), getIdentifier(state, value)),
       t.identifier(value)
   );
-
-  console.log(test)
-
   parentPath.replaceWith(
       t.jSXExpressionContainer(
           t.conditionalExpression(
@@ -24,6 +21,5 @@ exports.handleIf = function(path, value, state) {
           )
       )
   );
-
   path.remove();
 }

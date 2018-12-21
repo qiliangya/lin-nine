@@ -1,7 +1,7 @@
 
 <div className="wrap">
          <div>time: {time}</div>
-         {this.props.[object Object]? <p>some error happend</p> :
+         {this.state.error ? <p>some error happend</p> :
   <p className="name">your msg: {msg}</p>}
          
          <p v-show="msg" className="shown">test v-show</p>
