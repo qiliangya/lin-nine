@@ -23,3 +23,27 @@ exports.handleIf = function(path, value, state) {
   );
   path.remove();
 }
+
+exports.handleShow = function(path, value, state) {
+    const test = state.computeds[value] ? t.identifier(value) : t.memberExpression(
+        t.memberExpression(t.thisExpression(), getIdentifier(state, value)),
+        t.identifier(value)
+    );
+    path.replaceWith(
+        t.jSXAttribute(
+            t.jSXIdentifier('style'),
+            t.jSXExpressionContainer(
+                t.objectExpression([
+                    t.objectProperty(
+                        t.identifier('display'),
+                        t.conditionalExpression(
+                            test,
+                            t.stringLiteral('block'),
+                            t.stringLiteral('none')
+                        )
+                    )
+                ])
+            )
+        )
+    )
+}

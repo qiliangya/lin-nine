@@ -4,7 +4,7 @@ const tools = require('../utils/tools')
 const t = require('babel-types')
 
 // 引入指令转化
-const { handleIf } = require('../plugins/directives.js')
+const { handleIf, handleShow } = require('../plugins/directives.js')
 
 /*
 * 将vue的template转化成jsx
@@ -42,7 +42,10 @@ module.exports = function transformTemplate(tpl, state) {
           return ;
         }
         case 'v-if': {
-          handleIf(path, value, state)
+          handleIf(path, value, state); break;
+        }
+        case 'v-show': {
+          handleShow(path, value, state)
         }
       }
 
