@@ -9,6 +9,18 @@ const inquirer = require('inquirer');
 const transform = require('../src/index');
 const pkg = require('../package.json');
 
+const getDemoPath = path.join(__dirname, '../demo')
+
+const canCreateFiles = [] // 需要生成的文件及文件夹
+
+
+fs.readdir(getDemoPath, function(err, files){
+  if (err) throw err;
+  console.log(files)
+})
+
+
+
 // process.on('exit', () => console.log());
 
 
@@ -26,7 +38,7 @@ const pkg = require('../package.json');
 //     console.log();
 //     console.log(chalk.gray('    # transform a vue component to react component.'));
 //     console.log();
-//     console.log('    $ vtr -i ./components/vue.js -o ./components/ -n react-component');
+//     console.log('    $ none -i ./components/vue.js -o ./components/ -n react-component');
 //     console.log();
 // }); 
 
@@ -87,4 +99,4 @@ const pkg = require('../package.json');
 // } else {
 //     transform(src, targetPath, isSFC);
 // }
-transform()
+// transform()
