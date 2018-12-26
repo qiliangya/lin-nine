@@ -16,7 +16,19 @@ const canCreateFiles = [] // 需要生成的文件及文件夹
 
 fs.readdir(getDemoPath, function(err, files){
   if (err) throw err;
-  console.log(files)
+  files.forEach(v => {
+    fs.stat(path.join(getDemoPath, v), function(err, stats) {
+      if (err) throw err;
+      const IS_FILE = stats.isFile()
+      const IS_DIR = stats.isDirectory()
+      if (IS_FILE) {  // is file
+        transform(path.join(getDemoPath, v))
+      }
+      if (IS_DIR) { // is directory
+        // console.log(v)
+      }
+    })
+  })
 })
 
 
