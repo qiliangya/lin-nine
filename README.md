@@ -1,5 +1,5 @@
 # lin-nine
-将vue的tepmlate语法转化成react
+将vue的语法转化成react
 
 ## 如何使用
 
