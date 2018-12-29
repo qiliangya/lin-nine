@@ -6,7 +6,8 @@ export default class hi extends Component {
       aa: 1
     };
   }
+  static list = [1, 2, 3]
   render() {
-    return <div>hello world</div>;
+    return list.map(v => <div>{v}</div>)
   }
 }

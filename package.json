@@ -1,16 +1,19 @@
 {
-  "name": "nine",
+  "name": "lin-nine",
   "version": "1.0.0",
-  "description": "",
+  "description": "可以将vue语法转化为react语法",
   "main": "bin/main.js",
+  "keywords": [
+    "vue",
+    "react",
+    "vue2react",
+    "vue-to-react"
+  ],
   "bin": {
-    "nine": "bin/main.js"
+    "lin-nine": "bin/main.js"
   },
   "scripts": {
-    "start": "node bin/main -i ./demo -o ./dist",
-    "none": "node bin/main",
-    "help": "node bin/main --help",
-    "version": "node bin/main --version",
+    "start": "node bin/main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "qiliangya",

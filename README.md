@@ -1,5 +1,18 @@
-# babel-vue2jsx
-将vue的tepmlate语法转化成jsx
+# lin-nine
+将vue的tepmlate语法转化成react
+
+## 如何使用
+
+  全局安装
+
+
+  ``` 
+  npm i lin-nine -g
+
+  // demo
+  lin-nine -i ./demo -o ./dist
+
+  ```
 
 ## 新增模块
   1. ``` babel-core ``` 用于在node环境中使用babel
@@ -7,10 +20,6 @@
   3. ``` babel-traverse ``` 用于更新维护ast树, 常和babylon一起使用
   4. ``` babel-types ``` 是一个用于 AST 节点的 Lodash 式工具库 它包含了构造、验证以及变换 AST 节点的方法。 该工具库包含考虑周到的工具方法，对编写处理AST逻辑非常有用
   5. ``` babel-generator ``` Babel Generator模块是 Babel 的代码生成器，它读取AST并将其转换为代码和源码映射（sourcemaps）。
-
-### 真是让人难受啊, babel
-  
-  下次准备完成main.js里对文件的遍历
 
 ### 更新 2018/12/29
   完成I/O文件处理, 加入async模块处理并发文件操作
