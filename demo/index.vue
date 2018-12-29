@@ -4,9 +4,10 @@
 
 <script>
 export default {
+  name: 'hi',
   data () {
     return {
-      
+      aa: 1
     }
   }
 }

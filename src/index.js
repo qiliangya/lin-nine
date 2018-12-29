@@ -1,9 +1,12 @@
 const fs = require('fs');
 const path = require('path')
-const tpl = require('../constants/tpl').tpl
+const tpl = require('../constants/tpl')
 const generate = require('babel-generator').default;
 const tools = require('../tools')
 const async = require('async');
+const babylon = require('babylon');
+
+const { initProps, initData, initComputed, initComponents, initMethods, initRoot, initRender } = require('./transform/transformScript')
 
 const transformTemplate = require('./transform/transformTemplate')
 
@@ -15,7 +18,12 @@ module.exports = function(inputPath, outputPath) {
     // 存在 template, script, style
     const SFC_CONTEXT = tools.getSFC(inputPath)
 
-    // vue状态
+    // js的ast树
+    const vast = babylon.parse(SFC_CONTEXT.script, {
+      sourceType: 'module',
+      plugins: []
+    })
+    // vue状态模板
     const state = {
       name: undefined,
       data: {
@@ -26,10 +34,40 @@ module.exports = function(inputPath, outputPath) {
       components: {}
     };
 
+    // 需要替换的生命周期
+    const cycle = {
+      'created': 'componentWillMount',
+      'mounted': 'componentDidMount',
+      'updated': 'componentDidUpdate',
+      'beforeDestroy': 'componentWillUnmount',
+      'errorCaptured': 'componentDidCatch',
+      'render': 'render'
+    };
+
+    // 引入的依赖
+    const collect = { 
+      imports: [],
+      classMethods: {}
+    };
+
+    initProps(vast, state)
+    initData(vast, state);
+    initComputed(vast, state);
+    initComponents(vast, state);
+    initMethods(vast, state, cycle, collect)
+
     const tast = transformTemplate(SFC_CONTEXT.template, state) // 转化后的template ast树
     
+
+    // 根ast树
+    const rast = babylon.parse(tpl(state.name), { sourceType: 'module' })
+
+    initRoot(rast, collect, state, tast)
+
+    initRender(rast, state)
+
     // 根据ast树 生成源代码
-    const inputTemplateCode = generate(tast, {
+    const inputTemplateCode = generate(rast, {
       quotes: 'single',
       retainLines: true
     })
