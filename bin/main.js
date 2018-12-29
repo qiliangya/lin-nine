@@ -1,114 +1,49 @@
 #! /usr/bin/env node
 
-const program = require('commander');
-const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
-const inquirer = require('inquirer');
-
+const program = require('./program')();
 const transform = require('../src/index');
-const pkg = require('../package.json');
 
-const getDemoPath = path.join(__dirname, '../demo')
+let src = program.args[0];
+let dist = program.args[1] || process.cwd();
 
-const canCreateFiles = [] // 需要生成的文件及文件夹
+src = path.resolve(process.cwd(), src);
+dist = path.resolve(process.cwd(), dist);
+const getInputPath = src
+const getOutputPath = dist
 
 
-fs.readdir(getDemoPath, function(err, files){
-  if (err) throw err;
-  files.forEach(v => {
-    fs.stat(path.join(getDemoPath, v), function(err, stats) {
-      if (err) throw err;
-      const IS_FILE = stats.isFile()
-      const IS_DIR = stats.isDirectory()
-      if (IS_FILE) {  // is file
-        transform(path.join(getDemoPath, v))
-      }
-      if (IS_DIR) { // is directory
-        // console.log(v)
-      }
+function init() {
+  ergodicDir(getInputPath, getOutputPath)
+}
+
+// 遍历文件夹
+function ergodicDir(inputPath, outputPath) {
+  fs.readdir(inputPath, function(err, files){
+    if (err) throw err;
+    files.forEach(v => {
+      fs.stat(path.join(inputPath, v), function(err, stats) {
+        if (err) throw err;
+        const IS_FILE = stats.isFile()
+        const IS_DIR = stats.isDirectory()
+        const transInputPath = path.join(inputPath, v)
+        const transOutputPath = path.join(outputPath, v)
+        if (IS_FILE) {  // is file
+          if (path.extname(v) === '.vue') {
+            transform(transInputPath, transOutputPath).then(() => {
+              console.log(v + ' 文件转换成功')
+            })
+          } else {
+            return false;
+          }
+        }
+        if (IS_DIR) { // is directory
+          ergodicDir(transInputPath, transOutputPath)
+        }
+      })
     })
   })
-})
+}
 
-
-
-// process.on('exit', () => console.log());
-
-
-// program
-//     .version(pkg.version)
-//     .usage('[options]')
-//     .option('-i, --input', 'the input path for vue component')
-//     .option('-o, --output', 'the output path for react component, which default value is process.cwd()')
-//     .option('-n, --name', 'the output file name, which default value is "react.js"')
-//     .parse(process.argv);
-
-// program.on('--help', function () {
-//     console.log();
-//     console.log('  Examples:');
-//     console.log();
-//     console.log(chalk.gray('    # transform a vue component to react component.'));
-//     console.log();
-//     console.log('    $ none -i ./components/vue.js -o ./components/ -n react-component');
-//     console.log();
-// }); 
-
-// function help () {
-//     if (program.args.length < 1) {
-//         return program.help();
-//     }
-// }
-
-// help();
-
-// let src = program.args[0];
-// let dist = program.args[1] ? program.args[1] : process.cwd();
-// let name = program.args[2] ? program.args[2] : 'react.js';
-
-// src = path.resolve(process.cwd(), src);
-// dist = path.resolve(process.cwd(), dist);
-
-// if (!/(\.js|\.vue)$/.test(src)) {
-//     log(`Not support the file format: ${src}`);
-//     process.exit();
-// }
-
-// if (!fs.existsSync(src)) {
-//     log(`The source file dose not exist: ${src}`);
-//     process.exit();
-// }
-
-// if (!fs.statSync(src).isFile()) {
-//     log(`The source file is not a file: ${src}`);
-//     process.exit();
-// }
-
-// if (!fs.existsSync(dist)) {
-//     log(`The dist directory path dose not exist: ${dist}`);
-//     process.exit();
-// }
-
-// if (!/\.js$/.test(name)) {
-//     name += '.js';
-// }
-
-// const isSFC = /\.vue$/.test(src);
-// const targetPath = path.resolve(process.cwd(), path.join(dist, name));
-
-// if (fs.existsSync(targetPath)) {
-//     inquirer.prompt([{
-//         type: 'confirm',
-//         message: `The file ${name} is already exists in output directory. Continue?`,
-//         name: 'ok'
-//     }]).then((answers) => {
-//         if (answers.ok) {
-//             transform(src, targetPath, isSFC);
-//         } else {
-//             process.exit();
-//         }
-//     });
-// } else {
-//     transform(src, targetPath, isSFC);
-// }
-// transform()
+init()
